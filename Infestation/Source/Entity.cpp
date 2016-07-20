@@ -3,10 +3,9 @@
 
 #include "Entity.h"
 
-Entity::Entity(const sf::Texture* texture, data::EntityData* entity_data)
+Entity::Entity(data::EntityData* entity_data)
 	: entity_data_(entity_data)
 	, vertices_(sf::Quads)
-	, texture_(texture)
 {
 	initVertices();
 }
@@ -40,22 +39,22 @@ sf::FloatRect Entity::getLocalBounds() const
 
 void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.texture = texture_;
+	states.texture = entity_data_->texture;
 	target.draw(vertices_, states);
 }
 
 void Entity::initVertices()
 {
-	if (entity_data_->size == sf::Vector2f() && texture_)
-		entity_data_->size = static_cast<sf::Vector2f>(texture_->getSize());
+	if (entity_data_->size == sf::Vector2f() && entity_data_->texture)
+		entity_data_->size = static_cast<sf::Vector2f>(entity_data_->texture->getSize());
 
 	vertices_.append(sf::Vertex(sf::Vector2f(0.f,                  0.f)));
 	vertices_.append(sf::Vertex(sf::Vector2f(entity_data_->size.x, 0.f)));
 	vertices_.append(sf::Vertex(sf::Vector2f(entity_data_->size.x, entity_data_->size.y)));
 	vertices_.append(sf::Vertex(sf::Vector2f(0.f,                  entity_data_->size.y)));
 
-	if (texture_) {
-		const sf::Vector2f texture_size(texture_->getSize());
+	if (entity_data_->texture) {
+		const sf::Vector2f texture_size(entity_data_->texture->getSize());
 		vertices_[1].texCoords = sf::Vector2f(texture_size.x, 0.f);
 		vertices_[2].texCoords = sf::Vector2f(texture_size.x, texture_size.y);
 		vertices_[3].texCoords = sf::Vector2f(0.f,            texture_size.y);

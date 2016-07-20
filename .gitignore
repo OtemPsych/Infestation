@@ -187,3 +187,16 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+*.png
+*.pdn
+*.json
+*.tps
+*.sln
+*.ttf
+*.ogg
+*.flac
+*.jpg
+*.vcxproj
+*.filters
+Infestation/Assets/Fonts/_Font Sources.txt
+Infestation/Assets/Sounds/_Sound Sources.txt

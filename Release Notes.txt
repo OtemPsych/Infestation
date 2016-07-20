@@ -1,11 +1,28 @@
+v0.0.2 | 19 July 2016
+
+  Features
+
+    * Added projectiles (i.e. bullets)
+
+    * Added a crosshair
+
+    * Added a muzzle flash
+
+    * Added a gunfire sound
+
+
+
 v0.0.1 | 18 July 2016
 
   Features
 
-    * Added 2000x2000 map
+    * Added a 2000x2000 map
 
     * Added functionality for the player to control a character using the WASD keys
       and aiming with the mouse
+
+    * Added camera functionality that follows the player with the player being at
+      the center of the screen unless the edge of the map has been reached
 
 
 

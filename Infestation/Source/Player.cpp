@@ -10,9 +10,9 @@ Player::Movement::Movement()
 {
 }
 
-Player::Player(const sf::FloatRect& world_bounds, const sf::Texture* texture,
+Player::Player(const sf::FloatRect& world_bounds, const sf::Texture& muzzle_flash_texture,
 	           data::SurvivorData* survivor_data, sf::RenderWindow* window)
-	: Survivor(texture, survivor_data)
+	: Survivor(muzzle_flash_texture, survivor_data)
 	, world_bounds_(world_bounds)
 	, window_(window)
 {
@@ -72,6 +72,8 @@ void Player::handleMovement(const sf::Event& event)
 
 void Player::updateCurrent(sf::Time dt)
 {
+	Survivor::updateCurrent(dt);
+
 	handleWorldBoundsCollision();
 	handleRotation();
 
@@ -92,5 +94,8 @@ void Player::updateCurrent(sf::Time dt)
 
 void Player::handleEventCurrent(const sf::Event& event)
 {
-	handleMovement(event);
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+		fireProjectile();
+	else
+		handleMovement(event);
 }

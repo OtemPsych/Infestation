@@ -15,7 +15,7 @@ private:
 	};
 
 public:
-	Player(const sf::FloatRect& world_bounds, const sf::Texture* texture,
+	Player(const sf::FloatRect& world_bounds, const sf::Texture& muzzle_flash_texture,
 		   data::SurvivorData* survivor_data, sf::RenderWindow* window);
 private:
 	void handleWorldBoundsCollision();

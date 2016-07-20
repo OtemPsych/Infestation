@@ -1,11 +1,11 @@
 #include "Character.h"
 
-Character::Character(const sf::Texture* texture, data::CharacterData* character_data)
-	: Entity(texture, character_data)
+Character::Character(data::CharacterData* character_data)
+	: Entity(character_data)
 	, character_data_(character_data)
 	, health_(character_data->health)
 {
-	pyro::utils::setOriginFlags(pyro::utils::OriginFlag::Center, this);
+	setOriginFlags(pyro::utils::OriginFlag::Center);
 }
 
 Character::~Character()

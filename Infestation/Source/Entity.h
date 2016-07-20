@@ -10,10 +10,10 @@
 class Entity : public pyro::SceneNode
 {
 public:
-	enum EntityType { Survivor, Infected, Projectile, EntityTypeCount };
+	enum class EntityType { Survivor, Infected, Projectile, EntityTypeCount };
 
 public:
-	Entity(const sf::Texture* texture, data::EntityData* entity_data);
+	explicit Entity(data::EntityData* entity_data);
 	virtual ~Entity();
 public:
 	void setSize(const sf::Vector2f& size);
@@ -25,9 +25,9 @@ protected:
 private:
 	void initVertices();
 
-private:			   
-	data::EntityData*  entity_data_;
-	sf::VertexArray    vertices_;
-	const sf::Texture* texture_;
+protected:			   
+	data::EntityData* entity_data_;
+private:
+	sf::VertexArray   vertices_;
 };
 #endif

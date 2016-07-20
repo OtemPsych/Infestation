@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Rect.hpp>
 
 #include <PYRO/Utils.h>
+#include <PYRO/ResourceHolder.h>
 
 namespace data
 {
@@ -13,9 +14,10 @@ namespace data
 
 	struct EntityData
 	{
-		unsigned short entity_type;
-		sf::Vector2f   size;
-		unsigned short speed;
+		unsigned short     entity_type;
+		const sf::Texture* texture;
+		sf::Vector2f       size;
+		unsigned short     speed;
 	};
 
 	struct CharacterData : public EntityData
@@ -30,8 +32,18 @@ namespace data
 		unsigned short survivor_type;
 	};
 
-	using SurvivorDataHolder = std::vector<std::unique_ptr<SurvivorData>>;
+	struct InfectedData : public CharacterData
+	{
+		unsigned short infected_type;
+	};
 
-	SurvivorDataHolder initializeSurvivorData();
+	using SurvivorDataHolder = std::vector<std::unique_ptr<SurvivorData>>;
+	template <typename ID>
+	SurvivorDataHolder initializeSurvivorData(const pyro::TextureHolder<ID>& survivor_textures);
+
+	using ProjectileDataHolder = std::vector<std::unique_ptr<EntityData>>;
+	template <typename ID>
+	ProjectileDataHolder initializeProjectileData(const pyro::TextureHolder<ID>& projectile_textures);
 }
+#include "DataTables.inl"
 #endif

@@ -6,7 +6,7 @@
 class Character : public Entity
 {
 public:
-	Character(const sf::Texture* texture, data::CharacterData* character_data);
+	explicit Character(data::CharacterData* character_data);
 	virtual ~Character();
 public:
 	void receiveDamage(unsigned short damage);
