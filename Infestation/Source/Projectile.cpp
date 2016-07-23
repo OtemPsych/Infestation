@@ -17,7 +17,8 @@ Projectile::Projectile(const sf::Vector2u& window_size, const sf::Vector2f& shoo
 
 bool Projectile::isDestroyed() const
 {
-	return pyro::math::getHypotenuse(origin_position_ - getWorldPosition()) > max_travel_distance_;
+	return pyro::math::getHypotenuse(origin_position_ - getWorldPosition()) > max_travel_distance_ 
+		   || collided_;
 }
 
 void Projectile::updateCurrent(sf::Time dt)

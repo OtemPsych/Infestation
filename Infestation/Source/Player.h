@@ -30,5 +30,6 @@ private:
 	sf::RenderWindow*    window_;
 
 	Movement             movement_;
+	sf::Time             shoot_cooldown_elapsed_;
 };
 #endif

@@ -4,6 +4,8 @@
 
 int main()
 {
+	srand(static_cast<unsigned>(time(0)));
+
 	pyro::Application app(sf::VideoMode(1280, 720), "Infestation", sf::Style::Close);
 	app.registerState<GameState>(pyro::StateID::Game);
 

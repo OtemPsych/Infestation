@@ -1,3 +1,39 @@
+v0.0.4 | 22 July 2016
+
+  Features
+
+    * Added blood sprays when the infected are shot
+
+    * Added blood decals
+
+    * Added blood squirting sound effects
+
+    * Added a music track
+
+  Updates
+
+    - Increased map size to 2500x2500 (from 2000x2000)
+
+
+
+v0.0.3 | 20 July 2016
+
+  Features
+
+    * Added Zombies (one of the infected), they simply chase the player directly;
+      zombies have to get near a survivor to damage him
+
+    * Added projectile-infected collision
+
+    * Added survivor-infected collision
+
+  Updates
+
+    - Shooting now has a cooldown and holding down the left mouse button now fires
+      at set intervals
+
+
+
 v0.0.2 | 19 July 2016
 
   Features

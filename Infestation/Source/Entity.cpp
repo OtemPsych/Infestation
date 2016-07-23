@@ -5,6 +5,7 @@
 
 Entity::Entity(data::EntityData* entity_data)
 	: entity_data_(entity_data)
+	, collided_(false)
 	, vertices_(sf::Quads)
 {
 	initVertices();
@@ -12,6 +13,12 @@ Entity::Entity(data::EntityData* entity_data)
 
 Entity::~Entity()
 {
+}
+
+bool Entity::checkCollision(const Entity& entity)
+{
+	collided_ = getCollisionBounds().intersects(entity.getCollisionBounds());
+	return collided_;
 }
 
 void Entity::setSize(const sf::Vector2f& size)
@@ -30,6 +37,11 @@ void Entity::setTextureRect(const sf::FloatRect& texture_rect)
 	vertices_[1].texCoords = sf::Vector2f(texture_rect_right, texture_rect.top);
 	vertices_[2].texCoords = sf::Vector2f(texture_rect_right, texture_rect_bottom);
 	vertices_[3].texCoords = sf::Vector2f(texture_rect.left, texture_rect_bottom);
+}
+
+sf::FloatRect Entity::getCollisionBounds() const
+{
+	return getGlobalBounds();
 }
 
 sf::FloatRect Entity::getLocalBounds() const

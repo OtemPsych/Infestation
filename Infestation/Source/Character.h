@@ -9,7 +9,10 @@ public:
 	explicit Character(data::CharacterData* character_data);
 	virtual ~Character();
 public:
-	void receiveDamage(unsigned short damage);
+	sf::FloatRect getCollisionBounds() const override;
+
+	void dealDamage(Character* character);
+	virtual void receiveDamage(unsigned short damage);
 	virtual bool isDestroyed() const override;
 
 private:

@@ -15,6 +15,7 @@ Player::Player(const sf::FloatRect& world_bounds, const sf::Texture& muzzle_flas
 	: Survivor(muzzle_flash_texture, survivor_data)
 	, world_bounds_(world_bounds)
 	, window_(window)
+	, shoot_cooldown_elapsed_(sf::Time::Zero)
 {
 }
 
@@ -74,6 +75,16 @@ void Player::updateCurrent(sf::Time dt)
 {
 	Survivor::updateCurrent(dt);
 
+	if (shoot_cooldown_elapsed_ >= survivor_data_->shoot_cooldown) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			fireProjectile();
+			shoot_cooldown_elapsed_ = sf::Time::Zero;
+		}
+	}
+	else {
+		shoot_cooldown_elapsed_ += dt;
+	}
+
 	handleWorldBoundsCollision();
 	handleRotation();
 
@@ -94,8 +105,5 @@ void Player::updateCurrent(sf::Time dt)
 
 void Player::handleEventCurrent(const sf::Event& event)
 {
-	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-		fireProjectile();
-	else
-		handleMovement(event);
+	handleMovement(event);
 }
