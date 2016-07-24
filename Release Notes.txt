@@ -1,3 +1,17 @@
+v0.0.5 | 24 July 2016
+
+  Features
+
+    * Added Waves
+
+  Updates
+ 
+    - Reduced maximum zombie speed to 235 (from 270)
+
+    - Blood decals are now removed after 30 seconds
+
+
+
 v0.0.4 | 22 July 2016
 
   Features
@@ -6,7 +20,7 @@ v0.0.4 | 22 July 2016
 
     * Added blood decals
 
-    * Added blood squirting sound effects
+    * Added (placeholder) blood squirting sound effects
 
     * Added a music track
 

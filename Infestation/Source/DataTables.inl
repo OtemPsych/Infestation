@@ -45,7 +45,7 @@ namespace data
 		data[Infected::Zombie]->texture       = &infected_textures.get(Infected::Zombie);
 		data[Infected::Zombie]->size          = sf::Vector2f();
 		data[Infected::Zombie]->min_speed     = 80;
-		data[Infected::Zombie]->speed         = 270;
+		data[Infected::Zombie]->speed         = 235;
 		data[Infected::Zombie]->name          = "Zombie";
 		data[Infected::Zombie]->health        = 75;
 		data[Infected::Zombie]->damage        = 35;

@@ -6,12 +6,15 @@ Camera::Camera(const sf::FloatRect& world_bounds, const std::vector<Survivor*>& 
 	, survivors_(survivors)
 	, window_(window)
 	, view_(window_->getDefaultView())
+	, half_view_size_(view_.getSize() / 2.f)
 	, spectated_survivor_index_(0)
 {
 }
 
 void Camera::updateCurrent(sf::Time dt)
 {
+	setPosition(view_.getCenter() - half_view_size_);
+
 	// Change Survivor Being Spectated if Needed
 	if (survivors_[spectated_survivor_index_]->isDestroyed()) {
 		for (size_t i = 1; i < survivors_.size(); ++i) {

@@ -200,3 +200,4 @@ ModelManifest.xml
 *.filters
 Infestation/Assets/Fonts/_Font Sources.txt
 Infestation/Assets/Sounds/_Sound Sources.txt
+*.vsps

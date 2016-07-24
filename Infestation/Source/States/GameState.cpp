@@ -3,7 +3,10 @@
 GameState::GameState(pyro::StateStack* stack, sf::RenderWindow* window)
 	: State(stack, window)
 	, camera_(nullptr)
+	, blood_splatter_lifetime_(sf::seconds(30.f))
 	, crosshair_(nullptr)
+	, wave_(0)
+	, infected_per_wave_(6)
 	, world_bounds_(0.f, 0.f, 2500.f, 2500.f)
 {
 	window_->setMouseCursorVisible(false);
@@ -16,6 +19,17 @@ GameState::GameState(pyro::StateStack* stack, sf::RenderWindow* window)
 	blood_splatter_data_ = std::move(data::initializeBloodSplatterData(blood_splatter_textures_));
 
 	buildScene();
+
+	auto wave_text(std::make_unique<pyro::Text>());
+	wave_text->loadFontFromFile("Assets/Fonts/Waves.ttf");
+	wave_text->setOriginFlags(pyro::utils::OriginFlag::Right | pyro::utils::OriginFlag::Top);
+	wave_text->setTextColor(sf::Color::White);
+	wave_text->activateShadow(true);
+	wave_text->setShadowColor(sf::Color::Black);
+	wave_text->setShadowOffset(2.f, 2.f);
+	wave_text->setPosition(window_->getSize().x - 5.f, 5.f);
+	wave_text_ = wave_text.get();
+	camera_->attachChild(std::move(wave_text));
 
 	music_player_.setVolume(70.f);
 }
@@ -40,7 +54,10 @@ bool GameState::update(sf::Time dt)
 	handleSurvivors();
 
 	cleanupBloodSplatterAnimations();
+	cleanupBloodSplatters(dt);
 	setRandomMusicTrack();
+
+	updateWave();
 
 	if (survivors_.empty()) {
 		requestStateClear();
@@ -58,6 +75,20 @@ bool GameState::update(sf::Time dt)
 void GameState::draw()
 {
 	window_->draw(scene_graph_);
+}
+
+void GameState::updateWave()
+{
+	if (infected_.empty()) {
+		wave_text_->setString("Wave " + std::to_string(++wave_));
+		for (size_t i = 0; i < wave_ * infected_per_wave_; ++i) {
+			auto infected(std::make_unique<Infected>(world_bounds_, &survivors_,
+				                                     infected_data_[Infected::Zombie].get(),
+				                                     &blood_spray_data_));
+			infected_.push_back(infected.get());
+			scene_layers_[Characters]->attachChild(std::move(infected));
+		}
+	}
 }
 
 void GameState::setRandomMusicTrack()
@@ -91,7 +122,22 @@ void GameState::addBloodSplatter(const Infected& dead_infected)
 		blood_splatter_sprite->setOriginFlags(pyro::utils::OriginFlag::Center);
 		blood_splatter_sprite->scale(0.3f, 0.3f);
 	}
+	blood_splatters_.push_back(std::make_pair(blood_splatter_sprite.get(), blood_splatter_lifetime_));
 	scene_layers_[BloodDecals]->attachChild(std::move(blood_splatter_sprite));
+
+	std::cout << blood_splatters_.size() << std::endl;
+}
+
+void GameState::cleanupBloodSplatters(sf::Time dt)
+{
+	for (size_t i = 0; i < blood_splatters_.size(); ++i) {
+		if ((blood_splatters_[i].second -= dt) <= sf::Time::Zero) {
+			scene_layers_[BloodDecals]->detachChild(*blood_splatters_[i].first);
+			blood_splatters_.erase(blood_splatters_.begin() + i);
+
+			std::cout << blood_splatters_.size() << std::endl;
+		}
+	}
 }
 
 void GameState::cleanupBloodSplatterAnimations()
@@ -141,15 +187,6 @@ void GameState::handleProjectiles()
 }
 void GameState::handleInfected()
 {
-	// Add Infected if Necessary
-	if (infected_.size() < 15) {
-		auto infected(std::make_unique<Infected>(world_bounds_, &survivors_,
-			                                     infected_data_[Infected::Zombie].get(),
-												 &blood_spray_data_));
-		infected_.push_back(infected.get());
-		scene_layers_[Characters]->attachChild(std::move(infected));
-	}
-
 	// Delete Infected if Necessary
 	for (size_t i = 0; i < infected_.size(); ++i) {
 		if (infected_[i]->isDestroyed()) {
@@ -192,10 +229,10 @@ void GameState::buildScene()
 	auto background(std::make_unique<pyro::SpriteNode>(background_texture_, static_cast<sf::IntRect>(world_bounds_)));
 	scene_layers_[Background]->attachChild(std::move(background));
 
-	// Add Camera to Scene Layer: Background
+	// Add Camera to Scene Layer: GUI
 	auto camera(std::make_unique<Camera>(world_bounds_, survivors_, window_));
 	camera_ = camera.get();
-	scene_layers_[Background]->attachChild(std::move(camera));
+	scene_layers_[GUI]->attachChild(std::move(camera));
 
 	// Add Player to Scene Layer: Characters
 	auto player(std::make_unique<Player>(world_bounds_, muzzle_flash_texture_,
@@ -247,4 +284,7 @@ void GameState::setupResources()
 
 	// Music
 	music_player_.loadTheme(MusicID::Track1, "Assets/Music/Track1_TheWolf.ogg");
+
+	// Fonts
+	wave_font_.loadFromFile("Assets/Fonts/Waves.ttf");
 }
